@@ -2,7 +2,14 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const todo = require('./api/routes/todo');
+const mongoose = require('mongoose'); 
+const dotenv = require('dotenv');
+dotenv.config({ path: './nodemon.env' });
 
+
+
+mongoose.connect(process.env.MONGOLAB_URI, { useNewUrlParser: true })
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended:false}));
@@ -20,7 +27,7 @@ app.use((req, res, next) => {
     next();
 })
 
-
+app.use('/todo', todo);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
