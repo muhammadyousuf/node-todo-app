@@ -3,7 +3,7 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const todo = require('./api/routes/todo');
-const mongoose = require('mongoose'); 
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config({ path: './nodemon.env' });
 
@@ -12,7 +12,7 @@ dotenv.config({ path: './nodemon.env' });
 mongoose.connect(process.env.MONGOLAB_URI, { useNewUrlParser: true })
 
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
@@ -20,7 +20,7 @@ app.use((req, res, next) => {
     res.header(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    if(req.method === "OPTIONS"){
+    if (req.method === "OPTIONS") {
         res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
         return res.status(200).json({})
     }
@@ -28,7 +28,11 @@ app.use((req, res, next) => {
 })
 
 app.use('/todo', todo);
-
+app.get('/', (req, res, next) => {
+    res.status(200).json({
+        "created": "Todo APP"
+    })
+})
 app.use((req, res, next) => {
     const error = new Error('Not Found');
     error.status = 404;

@@ -41,7 +41,7 @@ const Todos = require('../models/todo');
 //             });
 //         })
 // })
-router.post('/', (req, res, next) => {
+router.post('/add', (req, res, next) => {
 
     const todo = new Todos({
         _id: new mongoose.Types.ObjectId(),
@@ -50,21 +50,15 @@ router.post('/', (req, res, next) => {
     })
     todo.save()
         .then(result => {
-            console.log('result', result);
-            res.status(200).json({
+            res.status(201).json({
                 message: 'Product Created SuccessFully',
                 todos: {
                     title: result.title,
                     completed: result.completed,
-                    _id: result._id,
-                    request: {
-                        type: 'GET',
-                        url: 'http://localhost:5000/product/' + result._id
-                    }
+                    _id: result._id
                 }
             })
         }).catch(err => {
-            console.log("error", err);
             res.status(500).json({ error: err })
 
         })
