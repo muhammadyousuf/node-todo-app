@@ -74,28 +74,34 @@ router.get('/todos/:todoId', (req, res, next) => {
         res.status(500).json({ error: err })
     })
 
- })
+})
 
-// router.patch('/:productId', (req, res, next) => {
-//     const id = req.params.productId;
-//     const updateOpt = {};
-//     for (const opt of req.body) {
-//         updateOpt[opt.Propname] = opt.value;
-//     }
-//     Product.update({ _id: id }, { $set: updateOpt }).exec().then(result => {
-//         console.log('update', result);
-//         res.status(200).json({
-//             message: 'Update Record Successfully',
-//             request: {
-//                 type: 'GET',
-//                 url: 'http://localhost:5000/product/' + id
-//             }
-//         });
-//     }).catch(err => {
-//         console.log('error', err);
-//         res.status(500).json({ error: err })
-//     })
-// })
+router.patch('/todos/:todoId', (req, res, next) => {
+    const id = req.params.todoId;
+    Todos.findById(id).select("title completed _id").exec().then(doc => {
+        if (doc.completed === false) {
+            Todos.updateOne({ _id: id }, { $set: { completed: true } }).exec().then(result => {
+
+                res.status(200).json({
+                    message: 'Update Record Successfully',
+                    todo: {
+                        _id: doc._id,
+                        title: doc.title,
+                        completed: true
+                    }
+                });
+            })
+        }
+        else {
+            res.status(409).json({
+                message: "Already Updated todo"
+            })
+        }
+    }).catch(err => {
+        console.log('error', err);
+        res.status(500).json({ error: err })
+    })
+})
 
 router.delete('/todos/:todoId', (req, res, next) => {
     const id = req.params.todoId;
