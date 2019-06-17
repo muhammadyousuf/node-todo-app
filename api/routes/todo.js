@@ -9,8 +9,6 @@ router.get('/todos', (req, res, next) => {
         .select("title completed _id")
         .exec()
         .then(docs => {
-            console.log("Get all todo ", docs);
-
             if (docs.length >= 0) {
                 const response = {
                     count: docs.length,
@@ -60,28 +58,23 @@ router.post('/add', (req, res, next) => {
         })
 
 })
-// router.get('/:productId', (req, res, next) => {
-//     const id = req.params.productId;
-//     Product.findById(id).select("name price _id").exec().then(doc => {
-//         console.log("Form Database", doc);
-//         if (doc) {
-//             res.status(200).json({
-//                 product: doc,
-//                 request: {
-//                     type: 'GET',
-//                     url: 'http://localhost:5000/product'
-//                 }
-//             });
-//         } else {
-//             res.status(404).json({ message: 'No Valid Entry For Provided ID ' });
-//         }
+router.get('/todos/:todoId', (req, res, next) => {
+    const id = req.params.todoId;
+    Todos.findById(id).select("title completed _id").exec().then(doc => {
+        if (doc) {
+            res.status(200).json({
+                todos: doc
+            });
+        } else {
+            res.status(404).json({ message: 'No Valid Entry For Provided ID ' });
+        }
 
-//     }).catch(err => {
-//         console.log('error', err);
-//         res.status(500).json({ error: err })
-//     })
+    }).catch(err => {
+        console.log('error', err);
+        res.status(500).json({ error: err })
+    })
 
-// })
+ })
 
 // router.patch('/:productId', (req, res, next) => {
 //     const id = req.params.productId;
