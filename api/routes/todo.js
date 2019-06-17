@@ -4,43 +4,39 @@ const mongoose = require('mongoose');
 
 const Todos = require('../models/todo');
 
-// router.get('/', (req, res, next) => {
-//     Product.find().sort({ name: 1 })
-//         .select("name price _id")
-//         .exec()
-//         .then(docs => {
-//             console.log("Get all Documents ", docs);
+router.get('/todos', (req, res, next) => {
+    Todos.find().sort({ title: 1 })
+        .select("title completed _id")
+        .exec()
+        .then(docs => {
+            console.log("Get all todo ", docs);
 
-//             if (docs.length >= 0) {
-//                 const response = {
-//                     count: docs.length,
-//                     product: docs.map(doc => {
-//                         return {
-//                             name: doc.name,
-//                             price: doc.price,
-//                             _id: doc._id,
-//                             request: {
-//                                 type: 'GET',
-//                                 url: 'http://localhost:5000/product/' + doc._id
-//                             }
-//                         }
-//                     })
-//                 }
-//                 res.status(200).json(response);
-//             } else {
-//                 res.status(404).json({
-//                     message: 'no entries found'
-//                 });
-//             }
+            if (docs.length >= 0) {
+                const response = {
+                    count: docs.length,
+                    todos: docs.map(doc => {
+                        return {
+                            title: doc.title,
+                            completed: doc.completed,
+                            _id: doc._id
+                        }
+                    })
+                }
+                res.status(200).json(response);
+            } else {
+                res.status(404).json({
+                    message: 'no entries found'
+                });
+            }
 
-//         })
-//         .catch(err => {
-//             console.log('error ', err);
-//             res.status(500).json({
-//                 error: err
-//             });
-//         })
-// })
+        })
+        .catch(err => {
+            console.log('error ', err);
+            res.status(500).json({
+                error: err
+            });
+        })
+})
 router.post('/add', (req, res, next) => {
 
     const todo = new Todos({
