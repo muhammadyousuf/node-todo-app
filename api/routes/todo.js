@@ -45,7 +45,7 @@ router.post('/add', (req, res, next) => {
     todo.save()
         .then(result => {
             res.status(201).json({
-                message: 'Product Created SuccessFully',
+                message: 'Todo Created SuccessFully',
                 todos: {
                     title: result.title,
                     completed: result.completed,
@@ -97,21 +97,16 @@ router.get('/todos/:todoId', (req, res, next) => {
 //     })
 // })
 
-// router.delete('/:productId', (req, res, next) => {
-//     const id = req.params.productId;
-//     Product.remove({ _id: id }).exec().then(result => {
-//         res.status(200).json({
-//             message: 'Deleted Product SuccessFully',
-//             request: {
-//                 type: 'POST',
-//                 url: 'http://localhost:5000/product',
-//                 body: { name: 'String', price: 'Number' }
-//             }
-//         })
-//     }).catch(err => {
-//         console.log('error', err);
-//         res.status(500).json({ error: err })
-//     })
-// })
+router.delete('/todos/:todoId', (req, res, next) => {
+    const id = req.params.todoId;
+    Todos.remove({ _id: id }).exec().then(result => {
+        res.status(203).json({
+            message: 'Deleted Todo SuccessFully'
+        })
+    }).catch(err => {
+        console.log('error', err);
+        res.status(500).json({ error: err })
+    })
+})
 
 module.exports = router;
